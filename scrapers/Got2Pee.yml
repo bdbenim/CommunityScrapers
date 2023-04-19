@@ -2,13 +2,13 @@ name: Got2Pee
 sceneByURL:
   - action: scrapeXPath
     url:
-      - got2pee.com
+      - got2pee.com/videos/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        Name: ///div[@class="nav sub-header"]/h1
+        Name: //div[@class="nav sub-header"]/h1
       Date:
         selector: //div[@class="movie-data"]/text()
         postProcess:
@@ -17,17 +17,18 @@ xPathScrapers:
                 with: ""
           - parseDate: Jan 2, 2006
       Details:
-        selector: //div[@class="movie-description"]/p
+        selector: //div[@class="movie-description"]
         postProcess:
           - replace:
               - regex: 'About video:'
                 with: ''
       Tags:
-        selector: //span[@class="tags-list"]/a
-        postProcess:
-          - replace:
-              - regex: '#'
-              - with: ''
+        Name:
+          selector: //span[@class="tags-list"]/a
+          postProcess:
+            - replace:
+                - regex: '#'
+                - with: ''
       Studio:
         Name: 
           fixed: "Got2Pee"
