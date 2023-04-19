@@ -1,0 +1,36 @@
+name: Got2Pee
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - got2pee.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        Name: ///div[@class="nav sub-header"]/h1
+      Date:
+        selector: //div[@class="movie-data"]/text()
+        postProcess:
+          - replace:
+              - regex: "^.*Published:"
+                with: ""
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="movie-description"]/p
+        postProcess:
+          - replace:
+              - regex: 'About video:'
+                with: ''
+      Tags:
+        selector: //span[@class="tags-list"]/a
+        postProcess:
+          - replace:
+              - regex: '#'
+              - with: ''
+      Studio:
+        Name: 
+          fixed: "Got2Pee"
+      Image:
+        selector: //img[@class="videoplayer-img"]/@src
+# Last Updated April 18, 2023
