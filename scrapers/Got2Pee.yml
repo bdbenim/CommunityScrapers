@@ -4,17 +4,27 @@ sceneByURL:
     url:
       - got2pee.com/videos/
     scraper: sceneScraper
+sceneByFragment:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    queryURL: https://members.got2pee.com/videos/{filename}/
+    queryURLReplace:
+      filename:
+        - regex: ^.*_
+          with:
+        - regex: _.*
+          with:
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
         Name: //div[@class="nav sub-header"]/h1
       Date:
-        selector: //div[@class="movie-data"]/text()
+        selector: //div[@class="movie-data"]
         postProcess:
           - replace:
-              - regex: "^.*Published:"
-                with: ""
+              - regex: (.*)(\w\w\w\s\d\d?,\s\d\d\d\d)(.*)
+                with: $2
           - parseDate: Jan 2, 2006
       Details:
         selector: //div[@class="movie-description"]
@@ -22,16 +32,56 @@ xPathScrapers:
           - replace:
               - regex: 'About video:'
                 with: ''
+              - regex: 'See more of this girl'
+                with: ''
       Tags:
         Name:
           selector: //span[@class="tags-list"]/a
           postProcess:
             - replace:
                 - regex: '#'
-                - with: ''
+                  with: ''
       Studio:
         Name: 
           fixed: "Got2Pee"
       Image:
         selector: //img[@class="videoplayer-img"]/@src
-# Last Updated April 18, 2023
+      URL:
+        selector: //input[@id="current_update"]/@value
+        postProcess:
+            - replace:
+                - regex: (.*)
+                  with: https://got2pee.com/videos/$1/
+      Performers:
+        Name: 
+          selector: //div[@class="movie-comments movie-padding"]/h4[ends-with(text(), "on Puffynetwork")]/text()
+          postProcess:
+            - replace:
+                - regex: '(\w+)(\son\sPuffynetwork)'
+                  with: '$1'
+
+driver:
+  cookies:
+    - CookieURL: "https://members.got2pee.com/"
+      Cookies:
+        - Name: "loggedcookie"
+          Domain: ".members.got2pee.com"
+          Value: "1"
+          Path: "/"
+        - Name: "PHPSESSID"
+          Domain: ".members.got2pee.com"
+          Value: ""
+          Path: "/"
+        - Name: "pcah"
+          Domain: ".got2pee.com"
+          Value: ""
+          Path: "/"
+        - Name: "pcar%5fTWVtYmVycyBPbmx5"
+          Domain: ".got2pee.com"
+          Value: ""
+          Path: "/"
+        - Name: "psso%5fTWVtYmVycyBPbmx5"
+          Domain: ".got2pee.com"
+          Value: ""
+          Path: "/"
+# Last Updated May 08, 2023
