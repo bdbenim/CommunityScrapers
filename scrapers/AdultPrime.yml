@@ -11,6 +11,15 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://adultprime.com/studios/video/{filename}/
+  queryURLReplace:
+    filename:
+      - regex: _.*
+        with:
+
 sceneByURL:
   - action: scrapeXPath
     url:
